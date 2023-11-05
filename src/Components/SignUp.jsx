@@ -2,9 +2,10 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-// import {  toast,ToastContainer } from 'react-toastify';
+import { FcGoogle } from "react-icons/fc";
+import { useGoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 
-// validation Schema to define rules for each and every field
 
 const validationSchema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -26,7 +27,7 @@ const validationSchema = yup.object().shape({
     .required("Confirm Password is required"),
 });
 
-const Main = () => {
+const SignUp = () => {
   const {
     control,
     handleSubmit,
@@ -49,7 +50,9 @@ const Main = () => {
 
     const emailExists = existingData.some((item) => item.email === data.email);
     if (emailExists) {
-      alert("User with this email already exists use another email to proceed!.");
+      alert(
+        "User with this email already exists use another email to proceed!."
+      );
     } else {
       // Email is unique, proceed with saving the data
       console.log("Form data:", data);
@@ -59,65 +62,76 @@ const Main = () => {
       localStorage.setItem("FormCredential", JSON.stringify(existingData));
     }
   };
-  return (
-    <div className="w-full px-[10%] bg-[#000] ">
-      <div className="flex items-center ">
-        <div className="w-[50%]">
-          <p className="text-center text-[#fff]">Vaibhav</p>
-        </div>
-        <div className="w-[50%]">
-          <p className="text-center ml-2 text-[#fff]">Sharma</p>
-        </div>
-      </div>
 
-      <h1 className="text-center mt-10 text-[#0ED3CF] font-semibold text-3xl ">
-        Information Form{" "}
-      </h1>
+  const navigate = useNavigate();
+
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse) => console.log(tokenResponse),
+  });
+
+
+  return (
+    <div className="w-full  bg-[#FAF9F6] flex flex-col items-center justify-center h-[100vh]">
       {/* Form Start */}
-      <div className="">
-        <form
-          className="flex flex-col  mt-10  px-[30%]"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <label className="text-[#fff]">Name :</label>
+      <div className=" py-5 px-20 bg-white text-black mt-10  rounded-xl">
+        {/* <h1 className="text-[#5F093D] text-3xl  text-center">LOGO</h1> */}
+        <h1 className="text-3xl font-semibold">Sign Up</h1>
+        <p className="mt-1">Just a few quick things to get started</p>
+        <form className="flex flex-col " onSubmit={handleSubmit(onSubmit)}>
+          <label className="mt-4 font-semibold">Name :</label>
           <Controller
             name="name"
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <input {...field} type="text" className="block w-[30rem] mt-2" />
+              <input
+                {...field}
+                type="text"
+                className="block w-[20rem] border outline-none py-1 px-3 rounded"
+                placeholder="Enter Name"
+              />
             )}
           />
           {errors.name && <p className="text-red-500">{errors.name.message}</p>}
 
-          <label className="mt-2 text-[#fff]"> Email</label>
+          <label className="mt-4 font-semibold"> Email :</label>
 
           <Controller
             name="email"
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <input {...field} type="email" className="block w-[30rem] mt-2" />
+              <input
+                {...field}
+                type="email"
+                className="block w-[20rem] border outline-none py-1 px-3 rounded"
+                placeholder="Enter Email ID"
+              />
             )}
           />
           {errors.email && (
             <p className="text-red-500">{errors.email.message}</p>
           )}
-          <label className="mt-2 text-[#fff]"> Phone</label>
+          <label className="mt-4 font-semibold"> Phone :</label>
 
           <Controller
             name="phone"
             control={control}
             defaultValue=""
             render={({ field }) => (
-              <input {...field} type="tel" className="block w-[30rem] mt-2" />
+              <input
+                {...field}
+                type="tel"
+                className="block w-[20rem] border outline-none py-1 px-3 rounded"
+                placeholder="Enter Phone Number"
+              />
             )}
           />
 
           {errors.phone && (
             <p className="text-red-500">{errors.phone.message}</p>
           )}
-          <label className="mt-2 text-[#fff]"> Password</label>
+          <label className="mt-4 font-semibold"> Password :</label>
 
           <Controller
             name="password"
@@ -127,14 +141,15 @@ const Main = () => {
               <input
                 {...field}
                 type="password"
-                className="block w-[30rem] mt-2"
+                className="block w-[20rem] border outline-none py-1 px-3 rounded"
+                placeholder="Enter Password"
               />
             )}
           />
           {errors.password && (
             <p className="text-red-500">{errors.password.message}</p>
           )}
-          <label className="mt-2 text-[#fff]"> Confirm Password</label>
+          <label className="mt-4 font-semibold"> Confirm Password :</label>
           <Controller
             name="confirmPassword"
             control={control}
@@ -143,7 +158,8 @@ const Main = () => {
               <input
                 {...field}
                 type="password"
-                className="block w-[30rem] mt-2"
+                className="block w-[20rem] border outline-none py-1 px-3 rounded"
+                placeholder="Enter Confirm Password"
               />
             )}
           />
@@ -152,17 +168,44 @@ const Main = () => {
           )}
           <button
             type="submit"
-            className="pt-2 px-4 bg-[#0ED3CF] text-black mt-5 w-48 ml-36 rounded"
+            className="py-1 px-4 bg-black text-white mt-5 rounded text-xl"
           >
-            Submit
+            Sign In
           </button>
         </form>
         {/* <ToastContainer 
 
         /> */}
+
+        <div className="flex items-center my-4">
+          <div className="flex-grow border-b border-gray-300"></div>
+          <div className="mx-4 text-black">OR</div>
+          <div className="flex-grow border-b border-gray-300"></div>
+        </div>
+
+        <section className="flex items-center justify-center">
+          <div className="flex items-center justify-center py-2 px-12 border rounded text-xl">
+            <p>{<FcGoogle size={30} />}</p>
+            <button onClick={() => login()} className="ml-2">
+              Sign in with Google
+            </button>
+          </div>
+        </section>
+
+
+        <section className="section mt-10 text-center">
+          Already have an account?{" "}
+          <button
+            className="border-b text-xl font-semibold"
+            onClick={() => navigate("/signin")}
+          >
+            {" "}
+            Sign In
+          </button>
+        </section>
       </div>
     </div>
   );
 };
 
-export default Main;
+export default SignUp;
