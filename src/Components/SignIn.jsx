@@ -2,13 +2,13 @@ import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-// import { FcGoogle } from "react-icons/fc";
+import { FcGoogle } from "react-icons/fc";
 
 import { useNavigate } from "react-router-dom";
 
-// import { useGoogleLogin } from "@react-oauth/google";
-import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import { useGoogleLogin } from "@react-oauth/google";
+// import { GoogleLogin } from "@react-oauth/google";
+// import { jwtDecode } from "jwt-decode";
 
 const validationSchema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -56,9 +56,9 @@ export const SignIn = () => {
 
   const navigate = useNavigate();
 
-//   const login = useGoogleLogin({
-//     onSuccess: (tokenResponse) => console.log(tokenResponse),
-//   });
+  const login = useGoogleLogin({
+    onSuccess: (tokenResponse) => console.log(tokenResponse),
+  });
 
   return (
     <div className="  bg-[#FAF9F6] flex flex-col items-center justify-center h-[100vh]">
@@ -123,11 +123,11 @@ export const SignIn = () => {
 
         <section className="flex items-center justify-center">
           <div className="flex items-center justify-center py-2 px-12 border rounded text-xl">
-            {/* <p>{<FcGoogle size={30} />}</p>
+            <p>{<FcGoogle size={30} />}</p>
             <button onClick={() => login()} className="ml-2">
               Sign in with Google
-            </button> */}
-            <GoogleLogin 
+            </button>
+            {/* <GoogleLogin 
              onSuccess={(credentialResponse) =>{
                 const credentialResponseDecoded = jwtDecode(credentialResponse.credential)
                 console.log(credentialResponseDecoded)
@@ -135,7 +135,7 @@ export const SignIn = () => {
              }} 
              onError={()=>{
                 console.log("Login Failed")
-             }}/>
+             }}/> */}
           </div>
         </section>
 
