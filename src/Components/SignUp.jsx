@@ -3,8 +3,10 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { FcGoogle } from "react-icons/fc";
-import { useGoogleLogin } from "@react-oauth/google";
+// import { useGoogleLogin } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 
 const validationSchema = yup.object().shape({
@@ -66,15 +68,15 @@ const SignUp = () => {
 
   const navigate = useNavigate();
 
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => console.log(tokenResponse),
-  });
+  // const login = useGoogleLogin({
+  //   onSuccess: (tokenResponse) => console.log(tokenResponse),
+  // });
 
 
   return (
     <div className="w-full  bg-[#FAF9F6] flex flex-col items-center justify-center h-[100vh]">
       {/* Form Start */}
-      <div className=" py-5 px-20 bg-white text-black mt-10  rounded-xl">
+      <main className=" py-5 px-20 bg-white text-black mt-10  rounded-xl">
         {/* <h1 className="text-[#5F093D] text-3xl  text-center">LOGO</h1> */}
         <h1 className="text-3xl font-semibold">Sign Up</h1>
         <p className="mt-1">Just a few quick things to get started</p>
@@ -186,10 +188,19 @@ const SignUp = () => {
 
         <section className="flex items-center justify-center">
           <div className="flex items-center justify-center py-2 px-12 border rounded text-xl">
-            <p>{<FcGoogle size={30} />}</p>
+            {/* <p>{<FcGoogle size={30} />}</p>
             <button onClick={() => login()} className="ml-2">
               Sign in with Google
-            </button>
+            </button> */}
+            <GoogleLogin 
+             onSuccess={(credentialResponse) =>{
+                const credentialResponseDecoded = jwtDecode(credentialResponse.credential)
+                console.log(credentialResponseDecoded)
+                navigate("/data")
+             }} 
+             onError={()=>{
+                console.log("Login Failed")
+             }}/>
           </div>
         </section>
 
@@ -204,7 +215,7 @@ const SignUp = () => {
             Sign In
           </button>
         </section>
-      </div>
+      </main>
     </div>
   );
 };

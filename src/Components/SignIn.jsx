@@ -6,7 +6,9 @@ import { FcGoogle } from "react-icons/fc";
 
 import { useNavigate } from "react-router-dom";
 
-import { useGoogleLogin } from "@react-oauth/google";
+// import { useGoogleLogin } from "@react-oauth/google";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
 
 const validationSchema = yup.object().shape({
   email: yup.string().email("Invalid email").required("Email is required"),
@@ -54,14 +56,14 @@ export const SignIn = () => {
 
   const navigate = useNavigate();
 
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => console.log(tokenResponse),
-  });
+//   const login = useGoogleLogin({
+//     onSuccess: (tokenResponse) => console.log(tokenResponse),
+//   });
 
   return (
     <div className="  bg-[#FAF9F6] flex flex-col items-center justify-center h-[100vh]">
       {/* Form Start */}
-      <div className=" py-10 px-20 bg-white text-black mt-10  rounded-xl ">
+      <main className=" py-10 px-20 bg-white text-black mt-10  rounded-xl ">
         {/* <h1 className="text-[#5F093D] text-3xl  text-center">LOGO</h1> */}
         <h1 className="text-3xl font-semibold">Sign In</h1>
         <p className="mt-1">Welcome back you've been missed</p>
@@ -121,10 +123,19 @@ export const SignIn = () => {
 
         <section className="flex items-center justify-center">
           <div className="flex items-center justify-center py-2 px-12 border rounded text-xl">
-            <p>{<FcGoogle size={30} />}</p>
+            {/* <p>{<FcGoogle size={30} />}</p>
             <button onClick={() => login()} className="ml-2">
               Sign in with Google
-            </button>
+            </button> */}
+            <GoogleLogin 
+             onSuccess={(credentialResponse) =>{
+                const credentialResponseDecoded = jwtDecode(credentialResponse.credential)
+                console.log(credentialResponseDecoded)
+                navigate("/data")
+             }} 
+             onError={()=>{
+                console.log("Login Failed")
+             }}/>
           </div>
         </section>
 
@@ -138,7 +149,7 @@ export const SignIn = () => {
             Sign Up
           </button>
         </section>
-      </div>
+      </main>
     </div>
   );
 };
