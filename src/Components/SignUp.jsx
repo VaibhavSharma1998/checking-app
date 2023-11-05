@@ -18,8 +18,8 @@ const validationSchema = yup.object().shape({
     .string()
     .required("Password is required")
     .matches(
-      /^(?=.*[A-Z])(?=.*[\W_]).{8,}$/,
-      "Password must have 8 characters with at least one uppercase letter and one special character"
+      /^(?=.*[A-Za-z\d\W_].{8,})/,
+      "password should contain atlest 8 characters"
     ),
   confirmPassword: yup
     .string()
@@ -58,6 +58,7 @@ const SignUp = () => {
       console.log("Form data:", data);
       existingData.push(data);
       alert("Your form has been submitted successfully!");
+      navigate("/signin")
       reset();
       localStorage.setItem("FormCredential", JSON.stringify(existingData));
     }

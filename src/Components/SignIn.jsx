@@ -15,8 +15,9 @@ const validationSchema = yup.object().shape({
     .string()
     .required("Password is required")
     .matches(
-      /^(?=.*[A-Z])(?=.*[\W_]).{8,}$/,
-      "Password must have 8 characters with at least one uppercase letter and one special character"
+        /^(?=.*[A-Za-z\d\W_].{8,})/,
+      "password contain atlest 8 characters"
+      
     ),
 });
 
@@ -44,6 +45,7 @@ export const SignIn = () => {
 
     if (user) {
       alert("You are sucessfully Logged in!");
+      navigate("/data")
       reset();
     } else {
       alert("User not found. Please check your email and password.");
@@ -57,9 +59,9 @@ export const SignIn = () => {
   });
 
   return (
-    <div className="w-full  bg-[#FAF9F6] flex flex-col items-center justify-center h-[100vh]">
+    <div className="  bg-[#FAF9F6] flex flex-col items-center justify-center h-[100vh]">
       {/* Form Start */}
-      <div className=" py-10 px-20 bg-white text-black mt-10  rounded-xl">
+      <div className=" py-10 px-20 bg-white text-black mt-10  rounded-xl ">
         {/* <h1 className="text-[#5F093D] text-3xl  text-center">LOGO</h1> */}
         <h1 className="text-3xl font-semibold">Sign In</h1>
         <p className="mt-1">Welcome back you've been missed</p>
