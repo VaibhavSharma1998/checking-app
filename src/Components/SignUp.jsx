@@ -174,7 +174,7 @@ const SignUp = () => {
             type="submit"
             className="py-1 px-4 bg-black text-white mt-5 rounded text-xl"
           >
-            Sign In
+            Sign Up
           </button>
         </form>
         
